@@ -1,0 +1,15 @@
+TenKPwLockerBundle_homepage:
+    pattern:  /hello/{name}
+    defaults: { _controller: TenKPwLockerBundle:Default:index }
+
+TenKPwLockerBundle_password_list:
+    pattern:  /passwords
+    defaults: { _controller: TenKPwLockerBundle:Default:passwordList }
+
+TenKPwLockerBundle_password_create:
+    pattern:  /create-password
+    defaults: { _controller: TenKPwLockerBundle:Default:createPassword }
+
+TenKPwLockerBundle_password_show:
+    pattern:  /show-password/{id}
+    defaults: { _controller: TenKPwLockerBundle:Default:showPassword }

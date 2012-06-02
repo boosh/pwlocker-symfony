@@ -1,0 +1,7 @@
+parameters:
+#    ten_k_pw_locker.example.class: TenK\PwLockerBundle\Example
+
+services:
+#    ten_k_pw_locker.example:
+#        class: %ten_k_pw_locker.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
