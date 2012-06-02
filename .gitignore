@@ -1,3 +1,4 @@
 Symfony/app/cache/*
 .project
 .settings
+Symfony/app/logs/*

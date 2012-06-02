@@ -10,12 +10,6 @@ use TenK\PwLockerBundle\Form\PasswordType;
 
 class DefaultController extends Controller
 {
-    
-    public function indexAction($name)
-    {
-        return $this->render('TenKPwLockerBundle:Default:index.html.twig', array('name' => $name));
-    }
-    
     /**
      * Displays a list of passwords
      */

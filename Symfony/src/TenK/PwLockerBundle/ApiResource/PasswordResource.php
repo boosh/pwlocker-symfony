@@ -35,4 +35,9 @@ class PasswordResource
         return $this->router->generate('TenKPwLockerBundle_password_get', 
             array('id' => $this->password->getId()), true);
     }
+    
+    public function getIsOwner()
+    {
+        return true;
+    }
 }

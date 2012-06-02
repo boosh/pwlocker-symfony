@@ -22,9 +22,24 @@ class ApiController extends Controller
     {
         $password = new Password();
         
-        $logger = $this->get('logger');
-        $logger->info($request);
+        $response = $this->processForm($password, $request);
         
+        if ($response === false)
+        {
+            // need to set the right status code
+            $response = new Response(json_encode(array(
+                'error' => 'Unable to update password')
+            ), 500);
+        }
+        
+        return $response;
+    }
+
+    /**
+     * Handle submitted Password data
+     */
+    protected function processForm($password, $request)
+    {
         $form = $this->createForm(new PasswordType(), $password);
         $form->bindRequest($request);
         
@@ -37,9 +52,36 @@ class ApiController extends Controller
             return new Response(json_encode($this->passwordsToArray($password)));
         }
         
-        return new Response(json_encode(array(
-            'error' => 'Unable to create password: ' . var_dump($form->getErrors())
-        )));
+        // should throw an exception here that can be caught to show the
+        // form was invalid.
+        return false;
+    }
+
+    /**
+     * Update a Password
+     */
+    public function updatePasswordAction(Request $request, $id)
+    {
+        $password = $this->getDoctrine()
+            ->getRepository('TenKPwLockerBundle:Password')
+            ->findOneById($id);
+        
+        if (!$password) 
+        {
+            throw $this->createNotFoundException("404 NOT FOUND");
+        }
+        
+        $response = $this->processForm($password, $request);
+        
+        if ($response === false)
+        {
+            // need to set the right status code
+            $response = new Response(json_encode(array(
+                'error' => 'Unable to update password')
+            ), 500);
+        }
+        
+        return $response;
     }
 
     /**
@@ -84,16 +126,18 @@ class ApiController extends Controller
         {
             $password = new PasswordResource($password, $this->get('router'));
             $responseArray[] = array(
+                'id' => $password->getId(),
                 'username' => $password->getUsername(),
                 'password' => $password->getPassword(),
                 'title' => $password->getTitle(),
                 'url' => $password->getUrl(),
                 'notes' => $password->getNotes(),
                 'resource_url' => $password->getResourceUrl(),
+                'is_owner' => $password->getIsOwner(),
                 'shares' => array()
             );
         }
-        
+
         return $responseArray;
     }
 }
