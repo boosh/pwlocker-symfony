@@ -6,10 +6,21 @@ TenKPwLockerBundle_password_list:
     pattern:  /passwords
     defaults: { _controller: TenKPwLockerBundle:Default:passwordList }
 
-TenKPwLockerBundle_password_create:
-    pattern:  /create-password
-    defaults: { _controller: TenKPwLockerBundle:Default:createPassword }
+TenKPwLockerBundle_password_api_list:
+    pattern:  /api/1.0/passwords/
+    defaults: { _controller: TenKPwLockerBundle:Api:listPasswords }
+    requirements:
+      _method: GET
 
-TenKPwLockerBundle_password_show:
-    pattern:  /show-password/{id}
-    defaults: { _controller: TenKPwLockerBundle:Default:showPassword }
+TenKPwLockerBundle_password_api_create:
+    pattern:  /api/1.0/passwords/
+    defaults: { _controller: TenKPwLockerBundle:Api:createPassword }
+    requirements:
+      _method: POST
+
+TenKPwLockerBundle_password_get:
+    pattern:  /api/1.0/passwords/{id}
+    defaults: { _controller: TenKPwLockerBundle:Api:getPassword }
+    requirements:
+      id: \d+
+

@@ -38,13 +38,8 @@ class DefaultController extends Controller
             }
         }
         
-        $passwords = $this->getDoctrine()
-            ->getRepository('TenKPwLockerBundle:Password')
-            ->findAll();
-        
         return $this->render('TenKPwLockerBundle:Default:password_list.html.twig', 
-            array('passwords' => $passwords,
-                'form' => $form->createView()));
+            array('form' => $form->createView()));
     }
     
     public function createPasswordAction()

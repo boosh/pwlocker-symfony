@@ -22,6 +22,8 @@ class PasswordType extends AbstractType
     {
         return array(
             'data_class' => 'TenK\PwLockerBundle\Entity\Password',
+            // remove csrf protection for now
+            'csrf_protection' => false,
         );
     }
 

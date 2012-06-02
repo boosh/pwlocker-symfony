@@ -96,7 +96,7 @@ $(function(){
     // define the collection of passwords
     var PasswordCollection = Backbone.Collection.extend({
         model: Password,
-        url: '/api/1.0/passwords/',
+        url: '/app_dev.php/api/1.0/passwords/',
 
         // maintain ordering by password title
         comparator: function(obj1, obj2) {
