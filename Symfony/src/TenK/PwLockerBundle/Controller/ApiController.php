@@ -43,7 +43,11 @@ class ApiController extends Controller
     {
         $form = $this->createForm(new PasswordApiType(), $password);
         
-        $form->bindRequest($request);
+        $data_str = $request->getContent();
+        $data = json_decode($data_str, true);
+        $data['shares'] = '';
+        $this->get('logger')->info('Form data is: ' . print_r($data, true));
+        $form->bind($data);
         
         if ($form->isValid())
         {
@@ -60,7 +64,7 @@ class ApiController extends Controller
             return new Response(json_encode($this->passwordsToArray($password)));
         }
         
-        $this->get('logger')->err('Form error was: ' . http_build_query($form->getErrors()));
+        $this->get('logger')->err('Form error was: ' . print_r($form->getErrors(), true));
         
         // should throw an exception here that can be caught to show the
         // form was invalid.

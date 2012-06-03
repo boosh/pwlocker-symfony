@@ -11,8 +11,10 @@ class PasswordApiType extends PasswordType
 {
     public function buildForm(FormBuilder $builder, array $options)
     {
+        parent::buildForm($builder, $options);
+        
         $builder
-            // ->add('id', 'text', array('property_path' => false))
+            ->add('id', 'text', array('property_path' => false))
             ->add('resource_url', 'text', array('property_path' => false))
             ->add('is_owner', 'text', array('property_path' => false))
             ->add('shares', 'choice', array('property_path' => false))

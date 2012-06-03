@@ -40,4 +40,9 @@ class PasswordResource
     {
         return true;
     }
+    
+    public function getShares()
+    {
+        return array();
+    }
 }
