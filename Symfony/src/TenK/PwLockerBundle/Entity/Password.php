@@ -2,6 +2,7 @@
 namespace TenK\PwLockerBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -57,6 +58,16 @@ class Password
      */
     protected $updatedAt; // = models.DateTimeField(auto_now=True, editable=False)
 
+    /** 
+     * @ORM\ManyToMany(targetEntity="PasswordContact", inversedBy="passwords") 
+     */
+    protected $shares;
+    
+    public function __construct()
+    {
+        $this->shares = new ArrayCollection();
+    }
+    
     /**
      * Get id
      *
@@ -212,8 +223,43 @@ class Password
         return $this->updatedAt;
     }
     
-    public function __toString()
+    /**
+     * Set createdAt
+     *
+     * @param datetime $createdAt
+     */
+    public function setCreatedAt($createdAt)
     {
-        return '$this->getTitle()';
+        $this->createdAt = $createdAt;
+    }
+
+    /**
+     * Set updatedAt
+     *
+     * @param datetime $updatedAt
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+    }
+
+    /**
+     * Add shares
+     *
+     * @param TenK\PwLockerBundle\Entity\PasswordContact $shares
+     */
+    public function addPasswordContact(\TenK\PwLockerBundle\Entity\PasswordContact $shares)
+    {
+        $this->shares[] = $shares;
+    }
+
+    /**
+     * Get shares
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getShares()
+    {
+        return $this->shares;
     }
 }

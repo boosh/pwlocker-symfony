@@ -43,28 +43,24 @@ class ApiController extends Controller
     {
         $form = $this->createForm(new PasswordApiType(), $password);
         
-        $data_str = $request->getContent();
-        $data = json_decode($data_str, true);
+        // get the content - this allows us to pull in data submitted using
+        // PUT as well as POST
+        $dataStr = $request->getContent();
+        
+        // decode the json to an associative array
+        $data = json_decode($dataStr, true);
+        
         $data['shares'] = '';
-        $this->get('logger')->info('Form data is: ' . print_r($data, true));
         $form->bind($data);
         
         if ($form->isValid())
         {
-            $this->get('logger')->debug('Form valid');
-            
-            $this->get('logger')->info('note: ' . $password->getNotes());
-            
             $em = $this->getDoctrine()->getEntityManager();
             $em->persist($password);
             $em->flush();
             
-            $this->get('logger')->info('Object persisted, note: ' . $password->getNotes());
-            
             return new Response(json_encode($this->passwordsToArray($password)));
         }
-        
-        $this->get('logger')->err('Form error was: ' . print_r($form->getErrors(), true));
         
         // should throw an exception here that can be caught to show the
         // form was invalid.

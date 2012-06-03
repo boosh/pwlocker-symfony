@@ -11,28 +11,14 @@ use TenK\PwLockerBundle\Form\PasswordType;
 class AppController extends Controller
 {
     /**
-     * Displays a list of passwords
+     * Displays the main app page with a form for adding new passwords
      */
     public function passwordListAction(Request $request)
     {
-        $password = new Password();
-        
-        $form = $this->createForm(new PasswordType(), $password);
-
-        if ($request->getMethod() == 'POST')
-        {
-            $form->bindRequest($request);
-            
-            if ($form->isValid())
-            {
-                $em = $this->getDoctrine()->getEntityManager();
-                $em->persist($password);
-                $em->flush();
-                return $this->redirect($this->generateUrl('TenKPwLockerBundle_password_list'));
-            }
-        }
-        
         return $this->render('TenKPwLockerBundle:Default:password_list.html.twig', 
-            array('form' => $form->createView()));
+            array('form' => $this->createForm(new PasswordType(), new Password())
+                    ->createView()
+            )
+        );
     }
 }
