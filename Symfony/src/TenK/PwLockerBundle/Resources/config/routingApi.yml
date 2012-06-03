@@ -1,0 +1,25 @@
+TenKPwLockerBundle_password_api_list:
+    pattern: /
+    defaults: { _controller: TenKPwLockerBundle:Api:listPasswords }
+    requirements:
+      _method: GET
+
+TenKPwLockerBundle_password_api_create:
+    pattern: /
+    defaults: { _controller: TenKPwLockerBundle:Api:createPassword }
+    requirements:
+      _method: POST
+
+TenKPwLockerBundle_password_api_get:
+    pattern: /{id}
+    defaults: { _controller: TenKPwLockerBundle:Api:getPassword }
+    requirements:
+      id: \d+
+      _method: GET
+
+TenKPwLockerBundle_password_api_update:
+    pattern: /{id}
+    defaults: { _controller: TenKPwLockerBundle:Api:updatePassword }
+    requirements:
+      id: \d+
+      _method: PUT

@@ -1,1 +1,44 @@
-This is me: Hello {{ name }}!
+{% extends "::base.html.twig" %}
+
+{% block content %}
+    <h1 class="page-header">Password locker <small>Demonstrating <strike>Django</strike> Symfony2 and Backbone.js</small></h1>
+
+    <div class="row">
+        <div class="span8">
+            <p>This application demonstrates how to create a web application
+                using Symfony2 and Backbone.js. It is a port to Symfony of 
+                the <a href="https://www.github.com/boosh/pwlocker">Django</a> version.
+                </p>
+
+            <p>Sometimes you need to be able to share passwords between
+                a team. For example when running a web site, the developers
+                might need to share passwords to the web servers, demo
+                email accounts, demo user accounts, etc. This application
+                lets you do just that.</p>
+
+            <p>
+                Follow
+                <a href="http://10kblogger.wordpress.com/2012/05/25/a-restful-password-locker-with-django-and-backbone-js/">the tutorial</a>
+                to see how this site was made. You can also check out the code
+                at the <a href="https://github.com/boosh/pwlocker">github repository</a>.
+            </p>
+
+            <div class="alert alert-info">
+                <h4 class="alert-heading">For demonstration purposes only!</h4>
+                <p>This is a demo application and may not be completely
+                    secure. Please don't use it to store real data.
+                </p>
+            </div>
+        </div>
+
+        <div class="span4">
+            <div class="well">
+                <p>
+                    <a href="{#% url registration_register %#}"
+                    class="btn btn-primary btn-large">Register</a>
+                </p>
+                <p>or <a href="{#% url django.contrib.auth.views.login %#}">log into a demo account</a>.</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

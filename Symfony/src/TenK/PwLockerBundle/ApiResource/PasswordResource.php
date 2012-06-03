@@ -32,7 +32,7 @@ class PasswordResource
      */
     public function getResourceUrl()
     {
-        return $this->router->generate('TenKPwLockerBundle_password_get', 
+        return $this->router->generate('TenKPwLockerBundle_password_api_get', 
             array('id' => $this->password->getId()), true);
     }
     

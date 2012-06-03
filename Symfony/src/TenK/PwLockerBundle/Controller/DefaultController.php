@@ -11,55 +11,10 @@ use TenK\PwLockerBundle\Form\PasswordType;
 class DefaultController extends Controller
 {
     /**
-     * Displays a list of passwords
+     * Displays the home page
      */
-    public function passwordListAction(Request $request)
+    public function indexAction()
     {
-        $password = new Password();
-        
-        $form = $this->createForm(new PasswordType(), $password);
-
-        if ($request->getMethod() == 'POST')
-        {
-            $form->bindRequest($request);
-            
-            if ($form->isValid())
-            {
-                $em = $this->getDoctrine()->getEntityManager();
-                $em->persist($password);
-                $em->flush();
-                return $this->redirect($this->generateUrl('TenKPwLockerBundle_password_list'));
-            }
-        }
-        
-        return $this->render('TenKPwLockerBundle:Default:password_list.html.twig', 
-            array('form' => $form->createView()));
-    }
-    
-    public function createPasswordAction()
-    {
-        $password = new Password();
-        $password->setTitle("Test pw");
-        $password->setUsername("myuser");
-        $password->setPassword("testpassword");
-        
-        $em = $this->getDoctrine()->getEntityManager();
-        $em->persist($password);
-        $em->flush();
-        
-        return new Response('Created password id '.$password->getId());
-    }
-    
-    public function showPasswordAction($id)
-    {
-        $password = $this->getDoctrine()
-            ->getRepository('TenKPwLockerBundle:Password')
-            ->findOneById($id);
-        
-        if (!$password) {
-            throw $this->createNotFoundException("Can't find that password'");
-        }
-        
-        return new Response("Password has title " . $password->getTitle());
+        return $this->render('TenKPwLockerBundle:Default:index.html.twig');
     }
 }

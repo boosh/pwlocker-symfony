@@ -11,6 +11,7 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 
 use TenK\PwLockerBundle\Entity\Password;
 use TenK\PwLockerBundle\Form\PasswordType;
+use TenK\PwLockerBundle\Form\PasswordApiType;
 use TenK\PwLockerBundle\ApiResource\PasswordResource;
 
 class ApiController extends Controller
@@ -41,16 +42,23 @@ class ApiController extends Controller
     protected function processForm($password, $request)
     {
         $form = $this->createForm(new PasswordType(), $password);
+        
         $form->bindRequest($request);
         
         if ($form->isValid())
         {
+            $this->get('logger')->debug('Form valid');
+            
             $em = $this->getDoctrine()->getEntityManager();
             $em->persist($password);
             $em->flush();
             
+            $this->get('logger')->debug('Object persisted');
+            
             return new Response(json_encode($this->passwordsToArray($password)));
         }
+        
+        $this->get('logger')->err('Form error was: ' . http_build_query($form->getErrors()));
         
         // should throw an exception here that can be caught to show the
         // form was invalid.
@@ -70,6 +78,8 @@ class ApiController extends Controller
         {
             throw $this->createNotFoundException("404 NOT FOUND");
         }
+        
+        $this->get('logger')->debug('Processing form');
         
         $response = $this->processForm($password, $request);
         

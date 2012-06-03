@@ -1,6 +1,14 @@
+homepage:
+    pattern:  /
+    defaults: { _controller: TenKPwLockerBundle:Default:index }
+
 TenKPwLockerBundle:
     resource: "@TenKPwLockerBundle/Resources/config/routing.yml"
-    prefix:   /
+    prefix:   /passwords
+
+TenKPwLockerBundle_Api:
+    resource: "@TenKPwLockerBundle/Resources/config/routingApi.yml"
+    prefix:   /api/1.0/passwords
 
 # Internal routing configuration to handle ESI
 #_internal:
