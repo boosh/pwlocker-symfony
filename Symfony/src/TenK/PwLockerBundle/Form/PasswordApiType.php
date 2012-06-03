@@ -12,11 +12,11 @@ class PasswordApiType extends PasswordType
     public function buildForm(FormBuilder $builder, array $options)
     {
         $builder
-            ->add('id')
-            ->add('resource_url')
-            ->add('is_owner')
-            ->add('shares')
-            ->add('maskedPassword')
+            // ->add('id', 'text', array('property_path' => false))
+            ->add('resource_url', 'text', array('property_path' => false))
+            ->add('is_owner', 'text', array('property_path' => false))
+            ->add('shares', 'choice', array('property_path' => false))
+            ->add('maskedPassword', 'text', array('property_path' => false))
         ;
     }
 }

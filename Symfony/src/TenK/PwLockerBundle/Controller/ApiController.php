@@ -41,7 +41,7 @@ class ApiController extends Controller
      */
     protected function processForm($password, $request)
     {
-        $form = $this->createForm(new PasswordType(), $password);
+        $form = $this->createForm(new PasswordApiType(), $password);
         
         $form->bindRequest($request);
         
@@ -49,11 +49,13 @@ class ApiController extends Controller
         {
             $this->get('logger')->debug('Form valid');
             
+            $this->get('logger')->info('note: ' . $password->getNotes());
+            
             $em = $this->getDoctrine()->getEntityManager();
             $em->persist($password);
             $em->flush();
             
-            $this->get('logger')->debug('Object persisted');
+            $this->get('logger')->info('Object persisted, note: ' . $password->getNotes());
             
             return new Response(json_encode($this->passwordsToArray($password)));
         }
