@@ -20,6 +20,8 @@ class AppKernel extends Kernel
             new TenK\PwLockerBundle\TenKPwLockerBundle(),
             new FOS\UserBundle\FOSUserBundle(),
             new TenK\UserBundle\TenKUserBundle(),
+            new JMS\SerializerBundle\JMSSerializerBundle($this),
+            new FOS\RestBundle\FOSRestBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

@@ -221,3 +221,4 @@
 [2012-06-03 19:21:04] request.ERROR: Exception thrown when handling an exception (InvalidArgumentException: The directory "/var/www/html/symfony/Symfony/app/cache/prod/annotations" is not writable.) [] []
 [2012-06-03 19:21:12] request.ERROR: Symfony\Component\HttpKernel\Exception\NotFoundHttpException: No route found for "GET /api/1.0/passwordcontacts/" (uncaught exception) at /var/www/html/symfony/Symfony/app/cache/prod/classes.php line 4584 [] []
 [2012-06-03 19:21:12] request.ERROR: Exception thrown when handling an exception (InvalidArgumentException: The directory "/var/www/html/symfony/Symfony/app/cache/prod/annotations" is not writable.) [] []
+[2012-06-04 13:52:35] request.ERROR: Symfony\Component\HttpKernel\Exception\NotFoundHttpException: No route found for "GET /api/1.0/passwordcontacts/" (uncaught exception) at /var/www/html/symfony/Symfony/app/cache/prod/classes.php line 4584 [] []
