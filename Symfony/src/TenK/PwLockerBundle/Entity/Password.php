@@ -4,6 +4,7 @@ namespace TenK\PwLockerBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
+use TenK\UserBundle\Entity\User;
 
 /**
  * @ORM\Entity(repositoryClass="TenK\PwLockerBundle\Repository\PasswordRepository")
@@ -20,6 +21,12 @@ class Password
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="TenK\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="created_by", referencedColumnName="id")
+     */
+    protected $createdBy;
     
     /**
      * @ORM\Column(type="string", length=200)
@@ -261,5 +268,25 @@ class Password
     public function getShares()
     {
         return $this->shares;
+    }
+
+    /**
+     * Set createdBy
+     *
+     * @param TenK\UserBundle\Entity\User $createdBy
+     */
+    public function setCreatedBy(\TenK\UserBundle\Entity\User $createdBy)
+    {
+        $this->createdBy = $createdBy;
+    }
+
+    /**
+     * Get createdBy
+     *
+     * @return TenK\UserBundle\Entity\User 
+     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
     }
 }

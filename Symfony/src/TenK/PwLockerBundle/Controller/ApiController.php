@@ -55,6 +55,11 @@ class ApiController extends Controller
         
         if ($form->isValid())
         {
+            if (!$password->getCreatedBy())
+            {
+                $password->setCreatedBy($this->get('security.context')->getToken()->getUser());
+            }
+            
             $em = $this->getDoctrine()->getEntityManager();
             $em->persist($password);
             $em->flush();
