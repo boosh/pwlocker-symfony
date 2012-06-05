@@ -82,3 +82,8 @@
 [FOSRestBundle]
     git=git://github.com/FriendsOfSymfony/FOSRestBundle.git
     target=bundles/FOS/RestBundle
+    
+[MopaBootstrapBundle]
+    git = "http://github.com/phiamo/MopaBootstrapBundle.git"
+    target = "/bundles/Mopa/Bundle/BootstrapBundle"
+    version=origin/v2.0.x

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>{#{ site.name }#}</title>
+    <title>PwLocker</title>
     
     <!--
         Sample create using as base http://twitter.github.com/bootstrap/examples/container-app.html
@@ -21,47 +21,39 @@
 <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
         <div class="container">
-            <a class="brand" href="{#% url home %#}">{#{ site.name }#}</a>
+            <a class="brand" href="{{ path('homepage') }}">PwLocker</a>
             <ul class="nav">
-                {% if true %}{# user.is_authenticated #}
-                    {#% url password_list as password_list_url %#}
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                     <li
-                    {#
-                        {% if request.path == password_list_url %}
+                        {% if path(app.request.attributes.get('_route')) == path('TenKPwLockerBundle_password_list') %}
                         class="active"
                         {% endif %}
-                    #}
-                        ><a href="{#{ password_list_url }#}">Home</a></li>
+                        ><a href="{{ path('TenKPwLockerBundle_password_list') }}">Home</a></li>
                 {% else %}
-                    {#% url registration_register as registration_register_url %#}
                     <li
-                    {#
-                        {% if request.path == registration_register_url %}
+                        {% if path(app.request.attributes.get('_route')) == path('fos_user_registration_register') %}
                         class="active"
                         {% endif %}
-                    #}
-                        ><a href="{#{ registration_register_url }#}">Register</a></li>
+                        ><a href="{{ path('fos_user_registration_register') }}">Register</a></li>
                 {% endif %}
             </ul>
 
             <ul class="nav pull-right">
-            {#
-            {% if user.is_authenticated %}
+            {% if is_granted("IS_AUTHENTICATED_FULLY") %}
                 <li>
-                    <p class="navbar-text">Hello {{ user.username }}!</p>
+                    <p class="navbar-text">Hello {{ app.user.username }}!</p>
                 </li>
-                <li><a href="{% url django.contrib.auth.views.logout %}">Log out</a></li>
+                <li><a href="{{ path('fos_user_security_logout') }}">Log out</a></li>
             {% else %}
                 <li>
-                    <form action="{% url django.contrib.auth.views.login %}" 
+                    <form action="{{ path('fos_user_security_login') }}" 
                           method="post" class="navbar-form">
-                        <input class="input-small" name="username" id="id_username" type="text" placeholder="Username">
-                        <input class="input-small" name="password" id="id_password" type="password" placeholder="Password">
+                        <input class="input-small" name="_username" id="username" type="text" placeholder="Username">
+                        <input class="input-small" name="_password" id="password" type="password" placeholder="Password">
                         <button class="btn" type="submit">Log in</button>
                     </form>
                 </li>
             {% endif %}
-            #}
             </ul>
         </div>
     </div>
@@ -70,49 +62,11 @@
     {% block container %}
         <div class="content" style="margin-top: 60px;">
             {% block content %}
-            <h1 class="page-header">Password locker <small>Demonstrating Django and Backbone.js</small></h1>
-
-            <div class="row">
-                <div class="span8">
-                    <p>This application demonstrates how to create a web application
-                        using Django and Backbone.js.</p>
-
-                    <p>Sometimes you need to be able to share passwords between
-                        a team. For example when running a web site, the developers
-                        might need to share passwords to the web servers, demo
-                        email accounts, demo user accounts, etc. This application
-                        lets you do just that.</p>
-
-                    <p>
-                        Follow
-                        <a href="http://10kblogger.wordpress.com/2012/05/25/a-restful-password-locker-with-django-and-backbone-js/">the tutorial</a>
-                        to see how this site was made. You can also check out the code
-                        at the <a href="https://github.com/boosh/pwlocker">github repository</a>.
-                    </p>
-
-                    <div class="alert alert-info">
-                        <h4 class="alert-heading">For demonstration purposes only!</h4>
-                        <p>This is a demo application and may not be completely
-                            secure. Please don't use it to store real data.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="span4">
-                    <div class="well">
-                        <p>
-                            <a href="{#% url registration_register %#}"
-                            class="btn btn-primary btn-large">Register</a>
-                        </p>
-                        <p>or <a href="{#% url django.contrib.auth.views.login %#}">log into a demo account</a>.</p>
-                    </div>
-                </div>
-            </div>
             {% endblock %}
         </div>
     {% endblock %}
     <footer>
-        <p>&copy; <a href='http://{#{ site.domain }#}'>{#{ site.name }#}</a> {#% now "Y" %#}</p>
+        <p>&copy; <a href='http://www.pwlocker.co.uk'>PwLocker</a> {{ "now"|date("Y") }}</p>
     </footer>
 </div>
     {% block javascripts %}

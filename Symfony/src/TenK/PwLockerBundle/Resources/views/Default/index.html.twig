@@ -34,10 +34,10 @@
         <div class="span4">
             <div class="well">
                 <p>
-                    <a href="{#% url registration_register %#}"
+                    <a href="{{ path('fos_user_registration_register') }}"
                     class="btn btn-primary btn-large">Register</a>
                 </p>
-                <p>or <a href="{#% url django.contrib.auth.views.login %#}">log into a demo account</a>.</p>
+                <p>or <a href="{{ path('fos_user_security_login') }}">log into a demo account</a>.</p>
             </div>
         </div>
     </div>

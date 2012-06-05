@@ -3,3 +3,5 @@ Symfony/app/cache/*
 .settings
 Symfony/app/logs/*
 *~
+Symfony/vendor/*
+Symfony/web/bundles

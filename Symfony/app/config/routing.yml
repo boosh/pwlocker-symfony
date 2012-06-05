@@ -7,7 +7,7 @@ homepage:
     pattern:  /
     defaults: { _controller: TenKPwLockerBundle:Default:index }
 
-TenKPwLockerBundle:
+TenKPwLockerBundle_password_list:
     resource: "@TenKPwLockerBundle/Resources/config/routing.yml"
     prefix:   /passwords
 
