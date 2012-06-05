@@ -69,3 +69,7 @@ fos_user:
 
 sensio_framework_extra:
     view:    { annotations: false }
+
+mopa_bootstrap:
+    form:
+      show_legend: false
