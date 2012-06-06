@@ -44,7 +44,7 @@ class PasswordContact
     protected $updatedAt; // = models.DateTimeField(auto_now=True, editable=False)
 
     /** 
-     * @ORM\ManyToMany(targetEntity="Password", mappedBy="passwordContacts") 
+     * @ORM\ManyToMany(targetEntity="Password", mappedBy="shares") 
      */
     protected $passwords;
     
