@@ -53,6 +53,12 @@ class PasswordContact
         $this->passwords = new ArrayCollection();
     }
     
+    public function __toString()
+    {
+        return $this->toUser->getFirstName() . ' ' . $this->toUser->getLastName() . 
+            ' (' . $this->toUser->getUsername() . ')';
+    }
+    
     /**
      * Get id
      *

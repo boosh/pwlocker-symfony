@@ -15,6 +15,15 @@ class PasswordType extends AbstractType
             ->add('password')
             ->add('url', null, array('label' => 'Site URL'))
             ->add('notes')
+            ->add('shares', 'entity',
+            array(
+                'class' => 'TenKPwLockerBundle:PasswordContact',
+                'label' => 'Share with',
+                'multiple' => true,
+                'expanded' => true
+            )
+        );
+
         ;
     }
     
