@@ -9,10 +9,10 @@ use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 
-use TenK\PwLockerBundle\Entity\Password;
+use TenK\PwLockerBundle\Entity\PasswordContact;
 use TenK\PwLockerBundle\Form\PasswordType;
 use TenK\PwLockerBundle\Form\PasswordApiType;
-use TenK\PwLockerBundle\ApiResource\PasswordResource;
+use TenK\PwLockerBundle\ApiResource\PasswordContactResource;
 
 class PasswordContactApiController extends Controller
 {
@@ -29,55 +29,24 @@ class PasswordContactApiController extends Controller
      */
     public function createPasswordContactAction(Request $request)
     {
-        $passwordContact = new PasswordContact();
-        
-        $response = $this->processForm(passwordContact, $request);
-        
-        if ($response === false)
-        {
-            // need to set the right status code
-            $response = new Response(json_encode(array(
-                'error' => 'Unable to update password')
-            ), 500);
-        }
-        
-        return $response;
-    }
+        $toUser = $this->getDoctrine()
+            ->getRepository('TenKUserBundle:User')
+            ->findOneById($request->get('to_user'));
 
-    /**
-     * Handle submitted PasswordContact data
-     */
-    protected function processForm($password, $request)
-    {
-        $form = $this->createForm(new PasswordApiType(), $password);
-        
-        // get the content - this allows us to pull in data submitted using
-        // PUT as well as POST
-        $dataStr = $request->getContent();
-        
-        // decode the json to an associative array
-        $data = json_decode($dataStr, true);
-        
-        $data['shares'] = '';
-        $form->bind($data);
-        
-        if ($form->isValid())
+        if (!$toUser)
         {
-            if (!$password->getCreatedBy())
-            {
-                $password->setCreatedBy($this->getUser());
-            }
-            
-            $em = $this->getDoctrine()->getEntityManager();
-            $em->persist($password);
-            $em->flush();
-            
-            return new Response(json_encode($this->passwordsToArray($password)));
+            throw $this->createNotFoundException("404 NOT FOUND");
         }
         
-        // should throw an exception here that can be caught to show the
-        // form was invalid.
-        return false;
+        $passwordContact = new PasswordContact();
+        $passwordContact->setFromUser($this->getUser());
+        $passwordContact->setToUser($toUser);
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        $em->persist($passwordContact);
+        $em->flush();
+        
+        return new Response('', 201);
     }
 
     /**
@@ -85,90 +54,71 @@ class PasswordContactApiController extends Controller
      */
     public function deletePasswordContactAction(Request $request, $id)
     {
-        $password = $this->getDoctrine()
-            ->getRepository('TenKPwLockerBundle:Password')
+        $passwordContact = $this->getDoctrine()
+            ->getRepository('TenKPwLockerBundle:PasswordContact')
             ->findOneBy(array('id' => $id, 
-                'createdBy' => $this->getUser()->getId()));
+                'fromUser' => $this->getUser()->getId()));
         
-        if (!$password) 
+        if (!$passwordContact) 
         {
             throw $this->createNotFoundException("404 NOT FOUND");
         }
 
         $em = $this->getDoctrine()->getEntityManager();
-        $em->remove($password);
+        $em->remove($passwordContact);
         $em->flush();
         
-        return new Response();
+        return new Response(null, 204);
     }
 
     /**
-     * Get a single Password
+     * Returns a single PasswordContact
      */
-    public function getPasswordContactAction($id)
+    public function getPasswordContactAction(Request $request, $id)
     {
         $repository = $this->getDoctrine()
-            ->getRepository('TenKPwLockerBundle:Password');
-            
-        $queryBuilder = $repository->createQueryBuilder('p')
-            ->where('p.id = :id')
-            ->setParameter('id', $id);
+            ->getRepository('TenKPwLockerBundle:PasswordContact');
         
-        $queryBuilder = $repository->userCanReadRestriction($queryBuilder, $this->getUser());
+        $query = $repository->createQueryBuilder('p')
+                ->where('p.id = :id')
+                ->andWhere('p.fromUser = :fromUser')
+                ->setParameters(array('id' => $id, 'fromUser' => $this->getUser()))
+                ->getQuery();
         
-        try
-        {
-            $password = $queryBuilder->getQuery()
-                ->getSingleResult();
-        } 
-        catch (\Doctrine\ORM\NoResultException $e)
-        {
-            throw $this->createNotFoundException("404 NOT FOUND");
-        }
+        $contacts = $query->getResult();
         
-        return new Response(json_encode($this->passwordsToArray(array($password))));
+        return new Response(json_encode($this->contactsToArray($contacts)));
     }
-
+    
     /**
      * Returns a list of Passwords
      */
     public function listPasswordContactsAction(Request $request)
     {
         $repository = $this->getDoctrine()
-            ->getRepository('TenKPwLockerBundle:Password');
+            ->getRepository('TenKPwLockerBundle:PasswordContact');
         
-        $queryBuilder = $repository->createQueryBuilder('p');
-        $queryBuilder = $repository->userCanReadRestriction($queryBuilder, $this->getUser());
+        $query = $repository->createQueryBuilder('p')
+                ->where('p.fromUser = :fromUser')
+                ->setParameter('fromUser', $this->getUser())
+                ->getQuery();
         
-        $passwords = $queryBuilder->getQuery()
-            ->getResult();
+        $contacts = $query->getResult();
         
-        return new Response(json_encode($this->passwordsToArray($passwords)));
+        return new Response(json_encode($this->contactsToArray($contacts)));
     }
     
     /**
-     * Convert a Password to an array. Converts each Password to a
-     * PasswordResource first so we can call additional methods which are
-     * only relevant to the API.
+     * Convert PasswordContacts to an array. 
      */
-    protected function passwordsToArray($passwords)
+    protected function contactsToArray($passwordContacts)
     {
         $responseArray = array();
         
-        foreach ($passwords as $password)
+        foreach ($passwordContacts as $contact)
         {
-            $password = new PasswordResource($password, $this->get('router'));
-            $responseArray[] = array(
-                'id' => $password->getId(),
-                'username' => $password->getUsername(),
-                'password' => $password->getPassword(),
-                'title' => $password->getTitle(),
-                'url' => $password->getUrl(),
-                'notes' => $password->getNotes(),
-                'resource_url' => $password->getResourceUrl(),
-                'is_owner' => $password->getIsOwner(),
-                'shares' => $password->getShares()
-            );
+            $contact = new PasswordContactResource($contact, $this->get('router'));
+            $responseArray[] = $contact->toArray();
         }
 
         return $responseArray;

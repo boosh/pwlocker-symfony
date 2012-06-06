@@ -41,26 +41,26 @@ TenKPwLockerBundle_user_api_get:
 
 # PasswordContact API routes
 TenKPwLockerBundle_password_contact_api_list:
-    pattern: /
+    pattern: /passwordcontacts/
     defaults: { _controller: TenKPwLockerBundle:PasswordContactApi:listPasswordContacts }
     requirements:
       _method: GET
 
 TenKPwLockerBundle_password_contact_api_create:
-    pattern: /
+    pattern: /passwordcontacts/
     defaults: { _controller: TenKPwLockerBundle:PasswordContactApi:createPasswordContact }
     requirements:
       _method: POST
 
 TenKPwLockerBundle_password_contact_api_get:
-    pattern: /{id}
+    pattern: /passwordcontacts/{id}
     defaults: { _controller: TenKPwLockerBundle:PasswordContactApi:getPasswordContact }
     requirements:
       id: \d+
       _method: GET
 
 TenKPwLockerBundle_password_contact_api_delete:
-    pattern: /{id}
+    pattern: /passwordcontacts/{id}
     defaults: { _controller: TenKPwLockerBundle:PasswordContactApi:deletePasswordContact }
     requirements:
       id: \d+
