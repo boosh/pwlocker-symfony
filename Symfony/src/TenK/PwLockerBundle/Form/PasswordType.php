@@ -20,7 +20,8 @@ class PasswordType extends AbstractType
                 'class' => 'TenKPwLockerBundle:PasswordContact',
                 'label' => 'Share with',
                 'multiple' => true,
-                'expanded' => true
+                'expanded' => true,
+                'required' => false
             )
         );
 
