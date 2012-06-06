@@ -19,4 +19,18 @@ class PasswordRepository extends EntityRepository
         
         return $query->getResult();
     }
+    
+    /**
+     * Add a restriction to a Query to only return objects if the user is
+     * permitted to read them. 
+     */
+    public function userCanReadRestriction(\Doctrine\ORM\QueryBuilder $builder, \TenK\UserBundle\Entity\User $user)
+    {
+        return $builder->leftJoin('p.shares', 's')
+            ->andWhere($builder->expr()->orX(
+                $builder->expr()->eq('p.createdBy', ':creator'),
+                $builder->expr()->eq('s.toUser', ':toUser')
+            ))
+            ->setParameters(array('creator' => $user, 'toUser' => $user));
+    }
 }

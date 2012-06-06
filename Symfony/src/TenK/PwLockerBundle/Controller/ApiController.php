@@ -17,6 +17,14 @@ use TenK\PwLockerBundle\ApiResource\PasswordResource;
 class ApiController extends Controller
 {
     /**
+     * Returns the currently authenticated user.
+     */
+    protected function getUser()
+    {
+        return $this->get('security.context')->getToken()->getUser();
+    }
+    
+    /**
      * Create a new Password
      */
     public function createPasswordAction(Request $request)
@@ -57,7 +65,7 @@ class ApiController extends Controller
         {
             if (!$password->getCreatedBy())
             {
-                $password->setCreatedBy($this->get('security.context')->getToken()->getUser());
+                $password->setCreatedBy($this->getUser());
             }
             
             $em = $this->getDoctrine()->getEntityManager();
@@ -73,20 +81,21 @@ class ApiController extends Controller
     }
 
     /**
-     * Update a Password
+     * Update a Password. Only the creator may update an object.
      */
     public function updatePasswordAction(Request $request, $id)
     {
         $password = $this->getDoctrine()
             ->getRepository('TenKPwLockerBundle:Password')
-            ->findOneById($id);
+            ->findOneBy(array('id' => $id, 
+                'createdBy' => $this->getUser()));
         
         if (!$password) 
         {
             throw $this->createNotFoundException("404 NOT FOUND");
         }
         
-        $this->get('logger')->debug('Processing form');
+        // $this->get('logger')->debug('Processing form');
         
         $response = $this->processForm($password, $request);
         
@@ -106,11 +115,21 @@ class ApiController extends Controller
      */
     public function getPasswordAction($id)
     {
-        $password = $this->getDoctrine()
-            ->getRepository('TenKPwLockerBundle:Password')
-            ->findOneById($id);
+        $repository = $this->getDoctrine()
+            ->getRepository('TenKPwLockerBundle:Password');
+            
+        $queryBuilder = $repository->createQueryBuilder('p')
+            ->where('p.id = :id')
+            ->setParameter('id', $id);
         
-        if (!$password) 
+        $queryBuilder = $repository->userCanReadRestriction($queryBuilder, $this->getUser());
+        
+        try
+        {
+            $password = $queryBuilder->getQuery()
+                ->getSingleResult();
+        } 
+        catch (\Doctrine\ORM\NoResultException $e)
         {
             throw $this->createNotFoundException("404 NOT FOUND");
         }
@@ -123,9 +142,14 @@ class ApiController extends Controller
      */
     public function listPasswordsAction(Request $request)
     {
-        $passwords = $this->getDoctrine()
-            ->getRepository('TenKPwLockerBundle:Password')
-            ->findAll();
+        $repository = $this->getDoctrine()
+            ->getRepository('TenKPwLockerBundle:Password');
+        
+        $queryBuilder = $repository->createQueryBuilder('p');
+        $queryBuilder = $repository->userCanReadRestriction($queryBuilder, $this->getUser());
+        
+        $passwords = $queryBuilder->getQuery()
+            ->getResult();
         
         return new Response(json_encode($this->passwordsToArray($passwords)));
     }
@@ -151,7 +175,7 @@ class ApiController extends Controller
                 'notes' => $password->getNotes(),
                 'resource_url' => $password->getResourceUrl(),
                 'is_owner' => $password->getIsOwner(),
-                'shares' => array()
+                'shares' => $password->getShares()
             );
         }
 
