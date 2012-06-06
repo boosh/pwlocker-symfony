@@ -12,14 +12,6 @@ use Doctrine\ORM\EntityRepository;
  */
 class PasswordRepository extends EntityRepository
 {
-    public function findAllOrderedByTitle()
-    {
-        $query =  $this->createQueryBuilder('p')
-            ->orderBy('p.title', 'ASC');
-        
-        return $query->getResult();
-    }
-    
     /**
      * Add a restriction to a Query to only return objects if the user is
      * permitted to read them. 

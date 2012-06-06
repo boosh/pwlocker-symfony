@@ -66,6 +66,10 @@ fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
     firewall_name: secure
     user_class: TenK\UserBundle\Entity\User
+    
+    registration:
+        form:
+            type: tenk_user_registration
 
 sensio_framework_extra:
     view:    { annotations: false }

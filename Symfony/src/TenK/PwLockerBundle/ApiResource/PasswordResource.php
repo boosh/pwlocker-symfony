@@ -36,13 +36,35 @@ class PasswordResource
             array('id' => $this->password->getId()), true);
     }
     
+    /**
+     * Returns a boolean to indicate whether the current user created this
+     * object or not.
+     * 
+     * @todo implement this 
+     * @return boolean 
+     */
     public function getIsOwner()
     {
         return true;
     }
     
-    public function getShares()
+    /**
+     * Returns the public representation of this object as an array
+     * 
+     * @return array
+     */
+    public function toArray()
     {
-        return array();
+        return array(
+            'id' => $this->getId(),
+            'username' => $this->getUsername(),
+            'password' => $this->getPassword(),
+            'title' => $this->getTitle(),
+            'url' => $this->getUrl(),
+            'notes' => $this->getNotes(),
+            'resource_url' => $this->getResourceUrl(),
+            'is_owner' => $this->getIsOwner(),
+            'shares' => $this->getShares()
+        );
     }
 }

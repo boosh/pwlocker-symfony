@@ -5,3 +5,5 @@ Symfony/app/logs/*
 *~
 Symfony/vendor/*
 Symfony/web/bundles
+/nbproject/private/
+nbproject

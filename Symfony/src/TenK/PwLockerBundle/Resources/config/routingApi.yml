@@ -1,53 +1,68 @@
 TenKPwLockerBundle_password_api_list:
-    pattern: /
-    defaults: { _controller: TenKPwLockerBundle:Api:listPasswords }
+    pattern: /passwords/
+    defaults: { _controller: TenKPwLockerBundle:PasswordApi:listPasswords }
     requirements:
       _method: GET
 
 TenKPwLockerBundle_password_api_create:
-    pattern: /
-    defaults: { _controller: TenKPwLockerBundle:Api:createPassword }
+    pattern: /passwords/
+    defaults: { _controller: TenKPwLockerBundle:PasswordApi:createPassword }
     requirements:
       _method: POST
 
 TenKPwLockerBundle_password_api_get:
-    pattern: /{id}
-    defaults: { _controller: TenKPwLockerBundle:Api:getPassword }
+    pattern: /passwords/{id}
+    defaults: { _controller: TenKPwLockerBundle:PasswordApi:getPassword }
     requirements:
       id: \d+
       _method: GET
 
 TenKPwLockerBundle_password_api_update:
-    pattern: /{id}
-    defaults: { _controller: TenKPwLockerBundle:Api:updatePassword }
+    pattern: /passwords/{id}
+    defaults: { _controller: TenKPwLockerBundle:PasswordApi:updatePassword }
     requirements:
       id: \d+
       _method: PUT
 
 TenKPwLockerBundle_password_api_delete:
-    pattern: /{id}
-    defaults: { _controller: TenKPwLockerBundle:Api:deletePassword }
+    pattern: /passwords/{id}
+    defaults: { _controller: TenKPwLockerBundle:PasswordApi:deletePassword }
     requirements:
       id: \d+
       _method: DELETE
 
+# User API allows users to find other users to share with
+TenKPwLockerBundle_user_api_get:
+    pattern: /user/{username}
+    defaults: { _controller: TenKPwLockerBundle:UserApi:findUser }
+    requirements:
+      username: \w+
+      _method: GET
+
 # PasswordContact API routes
 TenKPwLockerBundle_password_contact_api_list:
     pattern: /
-    defaults: { _controller: TenKPwLockerBundle:Api:listPasswordContacts }
+    defaults: { _controller: TenKPwLockerBundle:PasswordContactApi:listPasswordContacts }
     requirements:
       _method: GET
 
 TenKPwLockerBundle_password_contact_api_create:
     pattern: /
-    defaults: { _controller: TenKPwLockerBundle:Api:createPasswordContact }
+    defaults: { _controller: TenKPwLockerBundle:PasswordContactApi:createPasswordContact }
     requirements:
       _method: POST
 
 TenKPwLockerBundle_password_contact_api_get:
     pattern: /{id}
-    defaults: { _controller: TenKPwLockerBundle:Api:getPasswordContact }
+    defaults: { _controller: TenKPwLockerBundle:PasswordContactApi:getPasswordContact }
     requirements:
       id: \d+
       _method: GET
 
+TenKPwLockerBundle_password_contact_api_delete:
+    pattern: /{id}
+    defaults: { _controller: TenKPwLockerBundle:PasswordContactApi:deletePasswordContact }
+    requirements:
+      id: \d+
+      _method: DELETE
+      

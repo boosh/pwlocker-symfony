@@ -13,7 +13,7 @@ TenKPwLockerBundle_password_list:
 
 TenKPwLockerBundle_Api:
     resource: "@TenKPwLockerBundle/Resources/config/routingApi.yml"
-    prefix:   /api/1.0/passwords
+    prefix:   /api/1.0/
 
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"

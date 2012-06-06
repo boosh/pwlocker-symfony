@@ -60,7 +60,7 @@ $(function(){
     // define the collection of contacts
     var ContactCollection = Backbone.Collection.extend({
         model: Contact,
-        url: '/api/1.0/passwordcontacts/',
+        url: '/app_dev.php/api/1.0/passwordcontacts/',
 
         // maintain ordering by first_name
         comparator: function(obj1, obj2) {
@@ -153,7 +153,7 @@ $(function(){
             // perform a GET request to the userSearch service and if it
             // returns a user, create a new PasswordContact
             $.ajax({
-                url: '/api/1.0/user/' + username,
+                url: '/app_dev.php/api/1.0/user/' + username,
                 dataType: 'json',
                 success: function(data, textStatus, jqXHR) {
                     that.dataList.addNew(data, {success: function() {

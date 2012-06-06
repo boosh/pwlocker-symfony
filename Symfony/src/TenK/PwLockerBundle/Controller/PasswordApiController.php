@@ -14,7 +14,7 @@ use TenK\PwLockerBundle\Form\PasswordType;
 use TenK\PwLockerBundle\Form\PasswordApiType;
 use TenK\PwLockerBundle\ApiResource\PasswordResource;
 
-class ApiController extends Controller
+class PasswordApiController extends Controller
 {
     /**
      * Returns the currently authenticated user.
@@ -184,18 +184,8 @@ class ApiController extends Controller
         
         foreach ($passwords as $password)
         {
-            $password = new PasswordResource($password, $this->get('router'));
-            $responseArray[] = array(
-                'id' => $password->getId(),
-                'username' => $password->getUsername(),
-                'password' => $password->getPassword(),
-                'title' => $password->getTitle(),
-                'url' => $password->getUrl(),
-                'notes' => $password->getNotes(),
-                'resource_url' => $password->getResourceUrl(),
-                'is_owner' => $password->getIsOwner(),
-                'shares' => $password->getShares()
-            );
+            $resource = new PasswordResource($password, $this->get('router'));
+            $responseArray[] = $resource->toArray();
         }
 
         return $responseArray;
