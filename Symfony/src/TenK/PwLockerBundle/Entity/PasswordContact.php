@@ -22,13 +22,13 @@ class PasswordContact
     protected $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="TenK\UserBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="TenK\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="fromuser_id", referencedColumnName="id")
      */
     protected $fromUser;
     
     /**
-     * @ORM\OneToOne(targetEntity="TenK\UserBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="TenK\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="touser_id", referencedColumnName="id")
      */
     protected $toUser;

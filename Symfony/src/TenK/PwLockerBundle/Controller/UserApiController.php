@@ -17,6 +17,14 @@ use TenK\PwLockerBundle\ApiResource\UserResource;
 class UserApiController extends Controller
 {
     /**
+     * Returns the currently authenticated user.
+     */
+    protected function getUser()
+    {
+        return $this->get('security.context')->getToken()->getUser();
+    }
+    
+    /**
      * Search for a user by username
      */
     public function findUserAction($username)
@@ -24,6 +32,12 @@ class UserApiController extends Controller
         $user = $this->getDoctrine()
             ->getRepository('TenKUserBundle:User')
             ->findOneByUsername($username);
+        
+        // don't let users search for themselves.
+        if ($this->getUser() == $user)
+        {
+            return new Response(null, 403);
+        }
         
         if (!$user) 
         {

@@ -38,6 +38,11 @@ class PasswordContactApiController extends Controller
             throw $this->createNotFoundException("404 NOT FOUND");
         }
         
+        if ($this->getUser() == $toUser)
+        {
+            return new Response(null, 403);
+        }
+        
         $passwordContact = new PasswordContact();
         $passwordContact->setFromUser($this->getUser());
         $passwordContact->setToUser($toUser);
@@ -46,7 +51,9 @@ class PasswordContactApiController extends Controller
         $em->persist($passwordContact);
         $em->flush();
         
-        return new Response('', 201);
+        $response = $this->getPasswordContactAction($request, $passwordContact->getId());
+        $response->setStatusCode(201);
+        return $response;
     }
 
     /**
@@ -85,9 +92,11 @@ class PasswordContactApiController extends Controller
                 ->setParameters(array('id' => $id, 'fromUser' => $this->getUser()))
                 ->getQuery();
         
-        $contacts = $query->getResult();
+        $contact = $query->getSingleResult();
         
-        return new Response(json_encode($this->contactsToArray($contacts)));
+        $contactResource = new PasswordContactResource($contact, $this->get('router'));
+        
+        return new Response(json_encode($contactResource->toArray()));
     }
     
     /**
