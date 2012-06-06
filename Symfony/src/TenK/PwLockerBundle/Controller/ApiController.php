@@ -88,26 +88,45 @@ class ApiController extends Controller
         $password = $this->getDoctrine()
             ->getRepository('TenKPwLockerBundle:Password')
             ->findOneBy(array('id' => $id, 
-                'createdBy' => $this->getUser()));
+                'createdBy' => $this->getUser()->getId()));
         
         if (!$password) 
         {
             throw $this->createNotFoundException("404 NOT FOUND");
         }
         
-        // $this->get('logger')->debug('Processing form');
-        
         $response = $this->processForm($password, $request);
         
         if ($response === false)
         {
-            // need to set the right status code
             $response = new Response(json_encode(array(
                 'error' => 'Unable to update password')
             ), 500);
         }
         
         return $response;
+    }
+    
+    /**
+     * Delete a Password. Only the creator may delete an object.
+     */
+    public function deletePasswordAction(Request $request, $id)
+    {
+        $password = $this->getDoctrine()
+            ->getRepository('TenKPwLockerBundle:Password')
+            ->findOneBy(array('id' => $id, 
+                'createdBy' => $this->getUser()->getId()));
+        
+        if (!$password) 
+        {
+            throw $this->createNotFoundException("404 NOT FOUND");
+        }
+
+        $em = $this->getDoctrine()->getEntityManager();
+        $em->remove($password);
+        $em->flush();
+        
+        return new Response();
     }
 
     /**

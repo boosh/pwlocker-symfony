@@ -23,3 +23,31 @@ TenKPwLockerBundle_password_api_update:
     requirements:
       id: \d+
       _method: PUT
+
+TenKPwLockerBundle_password_api_delete:
+    pattern: /{id}
+    defaults: { _controller: TenKPwLockerBundle:Api:deletePassword }
+    requirements:
+      id: \d+
+      _method: DELETE
+
+# PasswordContact API routes
+TenKPwLockerBundle_password_contact_api_list:
+    pattern: /
+    defaults: { _controller: TenKPwLockerBundle:Api:listPasswordContacts }
+    requirements:
+      _method: GET
+
+TenKPwLockerBundle_password_contact_api_create:
+    pattern: /
+    defaults: { _controller: TenKPwLockerBundle:Api:createPasswordContact }
+    requirements:
+      _method: POST
+
+TenKPwLockerBundle_password_contact_api_get:
+    pattern: /{id}
+    defaults: { _controller: TenKPwLockerBundle:Api:getPasswordContact }
+    requirements:
+      id: \d+
+      _method: GET
+
